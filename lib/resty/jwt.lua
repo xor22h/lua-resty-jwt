@@ -4,6 +4,7 @@ local aes = require "resty.aes"
 local evp = require "resty.evp"
 local hmac = require "resty.hmac"
 local resty_random = require "resty.random"
+local basexx = require "basexx"
 
 local _M = {_VERSION="0.1.10"}
 local mt = {__index=_M}
@@ -15,8 +16,8 @@ local string_sub = string.sub
 local string_byte = string.byte
 local string_char = string.char
 local table_concat = table.concat
-local ngx_encode_base64 = ngx.encode_base64
-local ngx_decode_base64 = ngx.decode_base64
+local ngx_encode_base64 = basexx.to_base64
+local ngx_decode_base64 = basexx.from_base64
 local cjson_encode = cjson.encode
 local cjson_decode = cjson.decode
 local tostring = tostring
@@ -308,7 +309,7 @@ function _M.jwt_encode(self, ori)
   if type(ori) == str_const.table then
     ori = cjson_encode(ori)
   end
-  return ngx.encode_base64(ori):gsub(str_const.plus, str_const.dash):gsub(str_const.slash, str_const.underscore):gsub(str_const.equal, str_const.empty)
+  return ngx_encode_base64(ori):gsub(str_const.plus, str_const.dash):gsub(str_const.slash, str_const.underscore):gsub(str_const.equal, str_const.empty)
 end
 
 
